@@ -1,0 +1,30 @@
+{
+  "name": "nodejs-keksobooking",
+  "version": "0.0.1",
+  "description": "Keksobooking backend on NodeJS",
+  "main": "index.js",
+  "scripts": {
+    "test:lint": "eslint .",
+    "test": "npm run test:lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/biggus-dickus/nodejs-keksobooking.git"
+  },
+  "keywords": [
+    "++i + ++i",
+    "42",
+    "procrastination",
+    "despondency"
+  ],
+  "author": "Max Maslenko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/biggus-dickus/nodejs-keksobooking/issues"
+  },
+  "homepage": "https://github.com/biggus-dickus/nodejs-keksobooking#readme",
+  "devDependencies": {
+    "eslint": "5.6.0",
+    "eslint-config-htmlacademy": "0.5.2"
+  }
+}
