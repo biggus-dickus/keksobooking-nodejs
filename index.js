@@ -32,7 +32,7 @@ const Params = {
       break;
 
     default:
-      console.log([
+      console.error([
         `Unknown param: ${args[0]}.`,
         `To view a list of available options, please type "--help".`,
       ].join(`\n`));
