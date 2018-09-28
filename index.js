@@ -1,3 +1,5 @@
+'use strict';
+
 const Params = {
   VERSION: `--version`,
   HELP: `--help`
