@@ -13,7 +13,7 @@ const echo = () => {
     console.log([
       `Hey youser!`,
       `This script will setup and run the Keksobooking server.`,
-      `Powered by Keks' meows.`
+      `To view the list of available commands, type "--help".`
     ].join(`\n`));
     process.exit(0);
     return;
