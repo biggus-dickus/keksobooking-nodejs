@@ -4,6 +4,7 @@
   "description": "Keksobooking backend on NodeJS",
   "main": "index.js",
   "scripts": {
+    "start": "node .",
     "test:lint": "eslint .",
     "test": "npm run test:lint"
   },
