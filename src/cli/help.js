@@ -1,9 +1,6 @@
 'use strict';
 
-const commands = [
-  require(`./about`),
-  require(`./version`)
-];
+const listAll = require(`./list-all`);
 
 module.exports = {
   alias: `--help`,
@@ -12,9 +9,7 @@ module.exports = {
     console.log([
       `Available commands:`,
       `--help — print this message`,
-      `${commands.map(
-          (command) => command.alias + ` — ` + command.description
-      ).join(`\n`)}`
+      listAll()
     ].join(`\n`));
   }
 };
