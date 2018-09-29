@@ -1,5 +1,7 @@
 'use strict';
 
+const colors = require(`colors`);
+
 const allCommands = [
   require(`./about`),
   require(`./version`)
@@ -7,7 +9,7 @@ const allCommands = [
 
 const listAll = () => {
   return `${allCommands
-    .map((command) => command.alias + ` — ` + command.description)
+    .map((command) => colors.dim(command.alias) + ` — ` + colors.green(command.description))
     .join(`\n`)}`;
 };
 

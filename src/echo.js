@@ -1,5 +1,7 @@
 'use strict';
 
+const colors = require(`colors`);
+
 const commands = [
   require(`./cli/about`),
   require(`./cli/help`),
@@ -12,7 +14,7 @@ const echo = () => {
 
   if (!args[0]) {
     console.log([
-      `Hey youser!`,
+      colors.random(`Hey youser!`),
       `This script will setup and run the Keksobooking server.`,
       `To view the list of available commands, type "--help".`
     ].join(`\n`));

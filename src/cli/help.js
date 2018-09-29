@@ -1,5 +1,6 @@
 'use strict';
 
+const colors = require(`colors`);
 const listAll = require(`./list-all`);
 
 module.exports = {
@@ -8,7 +9,7 @@ module.exports = {
   run: () => {
     console.log([
       `Available commands:`,
-      `--help — print this message`,
+      `${colors.dim(`--help`)} — ${colors.green(`print this message`)}`,
       listAll()
     ].join(`\n`));
   }
