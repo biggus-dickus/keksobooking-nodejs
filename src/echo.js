@@ -7,6 +7,7 @@ const commands = [
   require(`./cli/help`),
   require(`./cli/version`)
 ];
+const throwError = require(`./cli/unknown-command`);
 
 const echo = () => {
   const args = process.argv.slice(2);
@@ -21,7 +22,7 @@ const echo = () => {
     return;
   }
 
-  const userCommand = commands.filter((command) => command.alias === args[0])[0];
+  const userCommand = commands.find((command) => command.alias === args[0]);
 
   if (userCommand) {
     userCommand.run();
@@ -29,9 +30,7 @@ const echo = () => {
     return;
   }
 
-  console.error(`Unknown param: ${args[0]}.\n`);
-  commands[1].run();
-  process.exit(1);
+  throwError(args[0]);
 };
 
 module.exports = echo;

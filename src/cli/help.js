@@ -1,11 +1,7 @@
 'use strict';
 
 const colors = require(`colors`);
-
-const commands = [
-  require(`./about`),
-  require(`./version`)
-];
+const listAll = require(`./list-all`);
 
 module.exports = {
   alias: `--help`,
@@ -14,7 +10,7 @@ module.exports = {
     console.log([
       `Available commands:`,
       `${colors.dim(`--help`)} — ${colors.green(`print this message`)}`,
-      `${commands.map((command) => colors.dim(command.alias) + ` — ` + colors.green(command.description)).join(`\n`)}`
+      listAll()
     ].join(`\n`));
   }
 };
