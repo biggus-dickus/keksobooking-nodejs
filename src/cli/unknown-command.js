@@ -7,7 +7,7 @@ const onUnknownCommand = (alias) => {
   console.error([
     `Unknown param: ${colors.cyan(alias)}.`,
     `Available commands:`,
-    `${colors.dim(`--help`)} — ${colors.green(`show help info`)}`,
+    `${colors.grey(`--help`)} — ${colors.green(`show help info`)}`,
     listAll()
   ].join(`\n`));
   process.exit(1);
