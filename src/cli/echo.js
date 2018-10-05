@@ -3,11 +3,11 @@
 const colors = require(`colors`);
 
 const commands = [
-  require(`./about`),
-  require(`./help`),
-  require(`./version`)
+  require(`./commands/about`),
+  require(`./commands/help`),
+  require(`./commands/version`)
 ];
-const throwError = require(`./unknown-command`);
+const throwError = require(`./commands/unknown-command`);
 
 const echo = () => {
   const args = process.argv.slice(2);
