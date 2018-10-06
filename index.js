@@ -1,3 +1,3 @@
 'use strict';
 
-require(`./src/echo`)();
+require(`./src/cli/echo`)();

@@ -9,7 +9,7 @@ const allCommands = [
 
 const listAll = () => {
   return `${allCommands
-    .map((command) => colors.dim(command.alias) + ` — ` + colors.green(command.description))
+    .map((command) => colors.grey(command.alias) + ` — ` + colors.green(command.description))
     .join(`\n`)}`;
 };
 

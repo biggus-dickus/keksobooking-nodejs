@@ -9,7 +9,7 @@ module.exports = {
   run: () => {
     console.log([
       `Available commands:`,
-      `${colors.dim(`--help`)} — ${colors.green(`print this message`)}`,
+      `${colors.grey(`--help`)} — ${colors.green(`print this message`)}`,
       listAll()
     ].join(`\n`));
   }

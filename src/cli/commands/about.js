@@ -1,9 +1,9 @@
 'use strict';
 
-const packageInfo = require(`../../package.json`);
+const packageInfo = require(`../../../package.json`);
 
 module.exports = {
-  alias: `--about`,
+  alias: `--author`,
   description: `About the program`,
   run: () => {
     console.log([

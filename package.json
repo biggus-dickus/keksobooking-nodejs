@@ -1,6 +1,6 @@
 {
   "name": "nodejs-keksobooking",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "Keksobooking backend on NodeJS",
   "main": "index.js",
   "scripts": {
