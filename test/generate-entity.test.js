@@ -6,7 +6,22 @@ const entity = require(`../src/model/entity`)();
 const {TITLES, X_MIN, X_MAX, Y_MIN, Y_MAX, PRICE_MIN, PRICE_MAX, TYPES, ROOMS_MIN, ROOMS_MAX, TIMES, FEATURES, PHOTOS} = require(`../src/model/constraints`);
 const {WEEK} = require(`../src/model/constants`);
 
-const containsAll = (haystack, arr) => arr.every((item) => haystack.indexOf(item) >= 0);
+
+const includesAll = (haystack, arr) => arr.every((item) => haystack.includes(item));
+
+const isBetween = (value, min, max, eqMin = false, eqMax = false) => {
+  if (eqMin && eqMax) {
+    return value >= min && value <= max;
+  }
+  if (eqMin) {
+    return value >= min && value < max;
+  }
+  if (eqMax) {
+    return value > min && value <= max;
+  }
+
+  return value > min && value < max;
+};
 
 describe(`generateEntity() test suite.`, () => {
   describe(`The generated object:`, () => {
@@ -14,24 +29,24 @@ describe(`generateEntity() test suite.`, () => {
       assert.deepStrictEqual(Object.keys(entity), [`author`, `offer`, `location`, `date`]);
     });
 
-    it(`should fetch avatars from 'robohash' service`, () => {
+    it(`should fetch avatars from 'robohash' service; current avatar is: ${entity.author.avatar}`, () => {
       assert.ok(entity.author.avatar.includes(`robohash`));
     });
 
-    it(`the 'offer.title' should be one of the following: ${TITLES}`, () => {
-      assert.ok(TITLES.indexOf(entity.offer.title) !== -1);
+    it(`the 'offer.title' (${entity.offer.title}) should be one of the following: ${TITLES}`, () => {
+      assert.ok(TITLES.includes(entity.offer.title));
     });
 
     it(`the 'offer.price' should be more than ${PRICE_MIN} and less than ${PRICE_MAX}`, () => {
-      assert.ok(entity.offer.price >= PRICE_MIN && entity.offer.price < PRICE_MAX);
+      assert.ok(isBetween(entity.offer.price, PRICE_MIN, PRICE_MAX, true));
     });
 
     it(`the 'offer.type' should be one of the following: ${TYPES}`, () => {
-      assert.ok(TYPES.indexOf(entity.offer.type) !== -1);
+      assert.ok(TYPES.includes(entity.offer.type));
     });
 
     it(`the 'offer.rooms' should be between ${ROOMS_MIN} and ${ROOMS_MAX}`, () => {
-      assert.ok(entity.offer.rooms >= ROOMS_MIN && entity.offer.rooms <= ROOMS_MAX);
+      assert.ok(isBetween(entity.offer.rooms, ROOMS_MIN, ROOMS_MAX, true, true));
     });
 
     it(`the 'offer.checkin' should be one of the following: ${TIMES}`, () => {
@@ -42,28 +57,37 @@ describe(`generateEntity() test suite.`, () => {
       assert.ok(TIMES.includes(entity.offer.checkout));
     });
 
-    it(`the 'offer.features' should contain a random number of unique items from ${FEATURES}`, () => {
-      assert.ok(containsAll(FEATURES, entity.offer.features));
+    it(`the 'offer.features' (${entity.offer.features}) should contain a random number of unique items from ${FEATURES}`, () => {
+      assert.ok(includesAll(FEATURES, entity.offer.features));
     });
 
     it(`the 'offer.description' should be an empty string`, () => {
-      assert.ok(entity.offer.description === ``);
+      assert.strictEqual(entity.offer.description, ``);
     });
 
     it(`the 'offer.photos' should contain the randomly shuffled items from ${PHOTOS}`, () => {
-      assert.ok(containsAll(PHOTOS, entity.offer.photos));
+      assert.ok(includesAll(PHOTOS, entity.offer.photos));
     });
 
-    it(`the 'location.x' should be more or equal than ${X_MIN} and less or equal than ${X_MAX}`, () => {
-      assert.ok(entity.location.x >= X_MIN && entity.location.x <= X_MAX);
+    it(`the 'location.x' (${entity.location.x}) should be more or equal than ${X_MIN} and less or equal than ${X_MAX}`, () => {
+      assert.ok(isBetween(entity.location.x, X_MIN, X_MAX, true, true));
     });
 
-    it(`the 'location.y' should be more or equal than ${Y_MIN} and less or equal than ${Y_MAX}`, () => {
-      assert.ok(entity.location.y >= Y_MIN && entity.location.y <= Y_MAX);
+    it(`the 'location.y' (${entity.location.y}) should be more or equal than ${Y_MIN} and less or equal than ${Y_MAX}`, () => {
+      assert.ok(isBetween(entity.location.y, Y_MIN, Y_MAX, true, true));
     });
 
-    it(`the 'date' must be in UNIX time between the current time and a week before`, () => {
-      assert.ok(entity.date >= Date.now() - WEEK && entity.date < Date.now());
+    const addressMatchesLocation = () => {
+      const stringCoordinates = entity.offer.address.split(`,`);
+      const numCoordinates = stringCoordinates.map((it) => +it);
+      assert.deepStrictEqual(numCoordinates, Object.values(entity.location));
+    };
+
+    it(`the 'offer.address' (${entity.offer.address}) should be a string of a pattern {{location.x}}, {{location.y}}, and the values should match`, addressMatchesLocation);
+
+    it(`the 'date' should be in UNIX time between the current time and a week before`, () => {
+      const weekBefore = Date.now() - WEEK;
+      assert.ok(isBetween(entity.date, weekBefore, Date.now(), true));
     });
   });
 });

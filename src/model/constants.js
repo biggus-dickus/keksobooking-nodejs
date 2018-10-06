@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports = {
-  HOUR: 3600,
-  DAY: 3600 * 24,
-  WEEK: 3600 * 24 * 7
-};
+const HOUR = 3600;
+const DAY = HOUR * 24;
+const WEEK = DAY * 7;
+
+module.exports = {HOUR, DAY, WEEK};
