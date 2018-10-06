@@ -25,7 +25,7 @@ const generateEntity = () => {
       rooms: getRandomIntInclusive(ROOMS_MIN, ROOMS_MAX),
       checkin: getRandomElement(TIMES),
       checkout: getRandomElement(TIMES),
-      features: getRandomElements(uniqueFeatures, getRandomIntArbitrary(0, uniqueFeatures.length)),
+      features: getRandomElements(uniqueFeatures, getRandomIntArbitrary(1, uniqueFeatures.length)),
       description: ``,
       photos: shuffle(PHOTOS.slice())
     },
