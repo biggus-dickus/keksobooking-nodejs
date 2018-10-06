@@ -20,7 +20,7 @@ const generateEntity = () => {
     offer: {
       title: getRandomElement(TITLES),
       address: `${coordX},${coordY}`,
-      price: getRandomIntArbitrary(PRICE_MIN, PRICE_MAX),
+      price: Math.round(getRandomIntArbitrary(PRICE_MIN, PRICE_MAX)),
       type: getRandomElement(TYPES),
       rooms: getRandomIntInclusive(ROOMS_MIN, ROOMS_MAX),
       checkin: getRandomElement(TIMES),
