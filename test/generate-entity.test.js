@@ -5,10 +5,10 @@ const assert = require(`assert`);
 const entity = require(`../src/model/entity`)();
 const {TITLES, X_MIN, X_MAX, Y_MIN, Y_MAX, PRICE_MIN, PRICE_MAX, TYPES, ROOMS_MIN, ROOMS_MAX, TIMES, FEATURES, PHOTOS} = require(`../src/model/constraints`);
 const {WEEK} = require(`../src/model/constants`);
-const removeDuplicates = require(`../src/utils/unique-array`);
 
 
 const includesAll = (haystack, arr) => arr.every((item) => haystack.includes(item));
+const hasDuplicates = (array) => (new Set(array)).size !== array.length;
 
 const isBetween = (value, min, max, eqMin = false, eqMax = false) => {
   if (eqMin && eqMax) {
@@ -59,7 +59,7 @@ describe(`generateEntity() test suite.`, () => {
     });
 
     it(`the 'offer.features' (${entity.offer.features}) should contain a random number of unique items from ${FEATURES}`, () => {
-      assert.ok(includesAll(FEATURES, removeDuplicates(entity.offer.features)));
+      assert.ok(!hasDuplicates(entity.offer.features) && includesAll(FEATURES, entity.offer.features));
     });
 
     it(`the 'offer.description' should be an empty string`, () => {
@@ -67,7 +67,7 @@ describe(`generateEntity() test suite.`, () => {
     });
 
     it(`the 'offer.photos' should contain the randomly shuffled items from ${PHOTOS}`, () => {
-      assert.ok(includesAll(PHOTOS, removeDuplicates(entity.offer.photos)));
+      assert.deepEqual(entity.offer.photos.slice().sort(), PHOTOS.slice().sort());
     });
 
     it(`the 'location.x' (${entity.location.x}) should be more or equal than ${X_MIN} and less or equal than ${X_MAX}`, () => {
