@@ -4,6 +4,7 @@ const colors = require(`colors`);
 
 const commands = [
   require(`./commands/about`),
+  require(`./commands/generate`),
   require(`./commands/help`),
   require(`./commands/version`)
 ];
@@ -14,7 +15,7 @@ const echo = () => {
 
   if (!args[0]) {
     console.log([
-      colors.random(`Hey youser!`),
+      colors.red(`Hey youser!`),
       `This script will setup and run the Keksobooking server.`,
       `To view the list of available commands, type "--help".`
     ].join(`\n`));
@@ -25,8 +26,12 @@ const echo = () => {
   const userCommand = commands.find((command) => command.alias === args[0]);
 
   if (userCommand) {
-    userCommand.run();
-    process.exit(0);
+    userCommand.run()
+      .catch((err) => {
+        console.error(err.message);
+        process.exit(1);
+      });
+    // process.exit(0);
     return;
   }
 
