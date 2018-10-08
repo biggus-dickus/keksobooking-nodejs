@@ -5,7 +5,7 @@ const colors = require(`colors`);
 const packageInfo = require(`../../../package.json`);
 
 module.exports = {
-  alias: `--version`,
+  alias: [`--version`, `-v`],
   description: `Shows program version`,
   run: () => {
     const version = packageInfo.version.split(`.`);
@@ -14,5 +14,6 @@ module.exports = {
     version[2] = colors.blue(version[2]);
 
     console.log(`${packageInfo.name} v${version.join(`.`)}`);
+    process.exit(0);
   }
 };

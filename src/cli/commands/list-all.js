@@ -4,6 +4,7 @@ const colors = require(`colors`);
 
 const allCommands = [
   require(`./about`),
+  require(`./generate`),
   require(`./version`)
 ];
 

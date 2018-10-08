@@ -1,37 +1,146 @@
 'use strict';
 
+const colors = require(`colors`);
 const fs = require(`fs`);
+const {promisify} = require(`util`);
+const fsstat = promisify(fs.stat);
+const readline = require(`readline`);
+
 const generateEntity = require(`../../model/entity`);
 
 
-const DEFAULT_PATH = `${process.cwd()}/static/offer.json`;
-const MAX_AT_ONCE = 100;
+const DEFAULT_PATH = `${process.cwd()}/tmp/offer.json`;
+const MAX_AT_ONCE = 10;
 
-const data = generateEntity();
-const fileWriteOptions = {encoding: `utf-8`, mode: 0o644};
+const makeFile = (count = 1, path = DEFAULT_PATH) => {
+  const fileWriteOptions = {encoding: `utf-8`, mode: 0o644};
+
+  return new Promise((resolve, reject) => {
+    const offers = [];
+    for (let i = 0; i < count; i++) {
+      offers.push(generateEntity());
+    }
+
+    fs.writeFile(path, JSON.stringify(offers), fileWriteOptions, (err) => {
+      if (err) {
+        return reject(err);
+      }
+
+      return resolve();
+    });
+  });
+};
+
 
 module.exports = {
-  alias: `--generate`,
-  description: `Generates <count> json file(s) with accommodation offers and saves them to provided <path>. Usage: '--generate <count> <path>' (1 by default).`,
+  alias: [`--generate`, `-g`],
+  description: `Generates up to ${MAX_AT_ONCE} mock accommodation offers in json format and saves the file to provided location. Works in prompt mode.`,
 
-  run: (count = 1, path = DEFAULT_PATH) => {
-    console.log(count, path)
-    if (typeof count !== `number`) {
-      throw Error(`<count> must be an integer. You provided ${typeof count}.`);
-    }
+  run: () => {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+      prompt: `meow >`
+    });
 
-    if (count <= 0 || count > MAX_AT_ONCE) {
-      throw Error(`Invalid argument ${count}. Can't generate less than 0 or more than ${MAX_AT_ONCE} files at once.`);
-    }
+    const Stages = {
+      INITIAL_QUESTION: `Start generating? ${colors.green.bold(`(y/n)`)}`,
+      NUM_QUESTION: `How many offers do you wish to create (max ${MAX_AT_ONCE})?`,
+      FILENAME_QUESTION: `Please provide a path where you wish to save your file (default: ${DEFAULT_PATH}).`,
+      OVERWRITE_QUESTION: `The catalogue you provided already contains the file with such name. Overwrite it? ${colors.green.bold(`(y/n)`)}`
+    };
 
-    return new Promise((resolve, reject) => {
-      fs.writeFile(path, JSON.stringify(data), fileWriteOptions, (err) => {
-        if (err) {
-          return reject(err);
-        }
+    let stage = Stages.INITIAL_QUESTION;
+    let offersCount = 0;
+    let filePath = ``;
 
-        return resolve();
-      });
+
+    console.log(`Howdy! This wizard will guide you through generation of json file with mock accommodation data.`);
+
+    rl.setPrompt(Stages.INITIAL_QUESTION);
+    rl.prompt();
+
+    rl.on(`line`, (userInput) => {
+      const proceed = (nextStage) => {
+        rl.setPrompt(nextStage);
+        stage = nextStage;
+        rl.prompt();
+      };
+
+      const exit = () => {
+        rl.close();
+        return;
+      };
+
+      const generate = () => {
+        makeFile(offersCount, filePath)
+          .then(() => {
+            console.log(`${colors.green(`File generated successfully. You can find it at ${filePath}`)}`);
+            rl.close();
+          })
+          .catch((e) => {
+            console.error(`${colors.red(`File write error: ${e.code}`)}`);
+            rl.close();
+          });
+      };
+
+      switch (stage) {
+        // Start
+        case Stages.INITIAL_QUESTION:
+          if (userInput === `n`) {
+            exit();
+          }
+
+          proceed(Stages.NUM_QUESTION);
+          break;
+
+        // How many
+        case Stages.NUM_QUESTION:
+          offersCount = +userInput;
+          if (offersCount > MAX_AT_ONCE || offersCount <= 0) {
+            console.error(`${colors.red(`Can't generate less than 0 or more than ${MAX_AT_ONCE} offers.`)}`);
+            exit();
+          }
+
+          proceed(Stages.FILENAME_QUESTION);
+          break;
+
+        // Where to save
+        case Stages.FILENAME_QUESTION:
+          filePath = userInput || DEFAULT_PATH;
+          fsstat(filePath)
+            .then((stats) => {
+              if (stats.isFile()) {
+                proceed(Stages.OVERWRITE_QUESTION);
+                return;
+              }
+
+              if (stats.isDirectory()) {
+                console.error(`${colors.red(`${filePath} is a directory. Please specify a file name as well.`)}`);
+                rl.prompt();
+              }
+            })
+            .catch(() => generate());
+          break;
+
+        // Overwrite
+        case Stages.OVERWRITE_QUESTION:
+          if (userInput === `n`) {
+            exit();
+          }
+
+          generate();
+          break;
+
+        default:
+          rl.close();
+      }
+    }).on(`close`, () => {
+      console.log(`\n${colors.cyan(`Process complete.`)}`);
+      process.exit(0);
+    }).on(`error`, (e) => {
+      console.error(`${colors.red(`Oops, ${e}. Sorry about that.`)}`);
+      process.exit(1);
     });
   }
 };
