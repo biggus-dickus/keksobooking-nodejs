@@ -4,7 +4,7 @@ const colors = require(`colors`);
 const listAll = require(`./list-all`);
 
 module.exports = {
-  alias: `--help`,
+  alias: [`--help`, `-h`],
   description: `Shows help info`,
   run: () => {
     console.log([
@@ -12,5 +12,7 @@ module.exports = {
       `${colors.grey(`--help`)} — ${colors.green(`print this message`)}`,
       listAll()
     ].join(`\n`));
+
+    process.exit(0);
   }
 };

@@ -33,7 +33,7 @@ const generateEntity = () => {
       x: coordX,
       y: coordY
     },
-    date: getRandomIntArbitrary(Date.now() - WEEK, Date.now())
+    date: Math.floor(getRandomIntArbitrary(Date.now() - WEEK, Date.now()))
   };
 };
 

@@ -5,9 +5,9 @@ const listAll = require(`./list-all`);
 
 const onUnknownCommand = (alias) => {
   console.error([
-    `Unknown param: ${colors.cyan(alias)}.`,
+    `${colors.red(`Unknown param:`)} ${colors.cyan(alias)}.\n`,
     `Available commands:`,
-    `${colors.grey(`--help`)} — ${colors.green(`show help info`)}`,
+    `${colors.grey([`--help`, `-h`])} — ${colors.green(`Shows help info`)}`,
     listAll()
   ].join(`\n`));
   process.exit(1);
