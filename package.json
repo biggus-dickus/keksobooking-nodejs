@@ -1,6 +1,6 @@
 {
   "name": "nodejs-keksobooking",
-  "version": "0.2.1",
+  "version": "0.3.1",
   "description": "Keksobooking backend on NodeJS",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,8 @@
     "++i + ++i",
     "42",
     "procrastination",
-    "despondency"
+    "despondency",
+    "Κύριε ἐλέησον"
   ],
   "author": "Max Maslenko",
   "license": "ISC",

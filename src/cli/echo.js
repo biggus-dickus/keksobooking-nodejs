@@ -4,6 +4,7 @@ const commands = [
   require(`./commands/about`),
   require(`./commands/generate`),
   require(`./commands/help`),
+  require(`./commands/server`),
   require(`./commands/version`)
 ];
 const throwError = require(`./commands/error`);
@@ -19,7 +20,7 @@ const echo = () => {
   const userCommand = commands.find((command) => command.alias.includes(args[0]));
 
   if (userCommand) {
-    userCommand.run();
+    userCommand.run(...args.slice(1));
     return;
   }
 

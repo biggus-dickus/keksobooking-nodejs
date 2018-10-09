@@ -28,4 +28,8 @@ describe(`Generate file test suite.`, () => {
   it(`Should throw an error if the provided offers count exceeds ${MAX_AT_ONCE}`, () => {
     assert.throws(() => makeFile(15));
   });
+
+  it(`Should throw an error if the provided offers count <= 0`, () => {
+    assert.throws(() => makeFile(-1));
+  });
 });
