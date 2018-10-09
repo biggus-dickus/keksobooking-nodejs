@@ -6,30 +6,8 @@ const {promisify} = require(`util`);
 const fsstat = promisify(fs.stat);
 const readline = require(`readline`);
 
-const generateEntity = require(`../../model/entity`);
-
-
-const DEFAULT_PATH = `${process.cwd()}/tmp/offer.json`;
-const MAX_AT_ONCE = 10;
-
-const makeFile = (count = 1, path = DEFAULT_PATH) => {
-  const fileWriteOptions = {encoding: `utf-8`, mode: 0o644};
-
-  return new Promise((resolve, reject) => {
-    const offers = [];
-    for (let i = 0; i < count; i++) {
-      offers.push(generateEntity());
-    }
-
-    fs.writeFile(path, JSON.stringify(offers), fileWriteOptions, (err) => {
-      if (err) {
-        return reject(err);
-      }
-
-      return resolve();
-    });
-  });
-};
+const {DEFAULT_PATH, MAX_AT_ONCE} = require(`../../model/constants`);
+const makeFile = require(`../../model/make-file`);
 
 
 module.exports = {
@@ -97,6 +75,12 @@ module.exports = {
         // How many
         case Stages.NUM_QUESTION:
           offersCount = +userInput;
+          if (Number.isNaN(offersCount)) {
+            console.error(`${colors.red(`You must provide a number from 1 to ${MAX_AT_ONCE}; ${typeof userInput} was provided instead.`)}`);
+            proceed(Stages.NUM_QUESTION);
+            return;
+          }
+
           if (offersCount > MAX_AT_ONCE || offersCount <= 0) {
             console.error(`${colors.red(`Can't generate less than 0 or more than ${MAX_AT_ONCE} offers.`)}`);
             exit();
