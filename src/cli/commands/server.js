@@ -11,8 +11,20 @@ module.exports = {
 
   run: (port = DEFAULT_PORT) => {
     const hostname = `127.0.0.1`;
+    const MimeTypes = {
+      '.ico': `image/x-icon`,
+      '.html': `text/html`,
+      '.js': `text/javascript`,
+      '.css': `text/css`,
+      '.png': `image/png`,
+      '.jpg': `image/jpeg`,
+      '.svg': `image/svg+xml`
+    };
 
     const server = http.createServer((req, res) => {
+
+      console.log(`${req.method} ${req.url}`);
+
       res.statusCode = 200;
       res.setHeader(`Content-Type`, `text/html`);
       res.end(`<h1>Hello World!</h1>`);
