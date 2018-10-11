@@ -15,11 +15,15 @@ module.exports = {
   description: `Starts a local server on provided <port> (${DEFAULT_PORT} by default). Example: "--server -p 1488 -l"`,
 
   run: (...args) => {
-    const port = args[args.indexOf(`-p`) + 1] || DEFAULT_PORT;
+    let port = args[args.indexOf(`-p`) + 1];
+    if (!port || isNaN(port) || port < 1200) {
+      port = DEFAULT_PORT;
+    }
+
     const enableLog = args[args.indexOf(`-l`)] || false;
 
     const hostname = HOST_NAME;
-    const MimeTypes = {
+    const MimeType = {
       '.ico': `image/x-icon`,
       '.html': `text/html`,
       '.js': `text/javascript`,
@@ -60,7 +64,7 @@ module.exports = {
           }
 
           const ext = path.parse(pathname).ext;
-          res.setHeader(`Content-type`, MimeTypes[ext] || `text/plain`);
+          res.setHeader(`Content-type`, MimeType[ext] || `text/plain`);
           res.end(data);
         });
       });
