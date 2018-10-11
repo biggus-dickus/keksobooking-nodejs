@@ -7,14 +7,18 @@ const path = require(`path`);
 const url = require(`url`);
 
 
+const HOST_NAME = `127.0.0.1`;
 const DEFAULT_PORT = 3000;
 
 module.exports = {
   alias: [`--server`, `-s`],
-  description: `Starts a local server on provided <port> (${DEFAULT_PORT} by default).`,
+  description: `Starts a local server on provided <port> (${DEFAULT_PORT} by default). Example: "--server -p 1488 -l"`,
 
-  run: (port = DEFAULT_PORT, enableLog = false) => {
-    const hostname = `127.0.0.1`;
+  run: (...args) => {
+    const port = args[args.indexOf(`-p`) + 1] || DEFAULT_PORT;
+    const enableLog = args[args.indexOf(`-l`)] || false;
+
+    const hostname = HOST_NAME;
     const MimeTypes = {
       '.ico': `image/x-icon`,
       '.html': `text/html`,
@@ -22,6 +26,7 @@ module.exports = {
       '.css': `text/css`,
       '.png': `image/png`,
       '.jpg': `image/jpeg`,
+      '.gif': `image/gif`,
       '.svg': `image/svg+xml`
     };
 
@@ -31,12 +36,13 @@ module.exports = {
       }
 
       const parsedUrl = url.parse(req.url);
-      const sanitizePath = path.normalize(parsedUrl.pathname).replace(/^(\.\.[\/\\])+/, ``);
-      let pathname = path.join(process.cwd(), `static`, sanitizePath);
+      const sanitizedPath = path.normalize(parsedUrl.pathname).replace(/^(\.\.[\/\\])+/, ``);
+      let pathname = path.join(process.cwd(), `static`, sanitizedPath);
 
       fs.exists(pathname, (exists) => {
         if (!exists) {
           res.statusCode = 404;
+          res.writeHead(404, `Not found.`, {'Content-Type': `text/plain`});
           res.end(`File ${pathname} not found.`);
           return;
         }
@@ -48,6 +54,7 @@ module.exports = {
         fs.readFile(pathname, (err, data) => {
           if (err) {
             res.statusCode = 500;
+            res.writeHead(500, `Internal server error.`, {'Content-Type': `text/plain`});
             res.end(`Error getting file: ${err}.`);
             return;
           }
@@ -60,7 +67,7 @@ module.exports = {
     });
 
     server.listen(port, hostname, () => {
-      console.log(`${colors.cyan(`Server is up and running at http://${hostname}:${port}/`)}`);
+      console.log(`${colors.cyan(`Static server is up and running at http://${hostname}:${port}/`)}`);
     });
   }
 };
