@@ -7,7 +7,11 @@ const {DEFAULT_PATH, MAX_AT_ONCE} = require(`./constants`);
 
 const makeFile = (count = 1, path = DEFAULT_PATH) => {
   if (count > MAX_AT_ONCE) {
-    throw Error(`The count param can not exceed ${MAX_AT_ONCE}.`);
+    throw Error(`The count param cannot exceed ${MAX_AT_ONCE}.`);
+  }
+
+  if (count <= 0) {
+    throw Error(`The count param cannot be lower or equal to 0.`);
   }
 
   const fileWriteOptions = {encoding: `utf-8`, mode: 0o644};

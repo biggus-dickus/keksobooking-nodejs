@@ -10,8 +10,8 @@ const makeFile = require(`../src/model/make-file`);
 const {MAX_AT_ONCE} = require(`../src/model/constants`);
 
 describe(`Generate file test suite.`, () => {
-  it(`Should create a new file in project root directory`, () => {
-    const testFileName = `test-offers.json`;
+  it(`Should create a new file in "tmp" catalogue of project root`, () => {
+    const testFileName = `${process.cwd()}/tmp/test-offers.json`;
     return makeFile(1, testFileName)
       .then(fsaccess(testFileName))
       .then(fsunlink(testFileName))
@@ -27,5 +27,9 @@ describe(`Generate file test suite.`, () => {
 
   it(`Should throw an error if the provided offers count exceeds ${MAX_AT_ONCE}`, () => {
     assert.throws(() => makeFile(15));
+  });
+
+  it(`Should throw an error if the provided offers count <= 0`, () => {
+    assert.throws(() => makeFile(-1));
   });
 });
