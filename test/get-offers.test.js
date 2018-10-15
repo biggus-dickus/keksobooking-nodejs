@@ -27,14 +27,14 @@ describe(`GET /api/offers test suite.`, () => {
     assert.strictEqual(offers.length, MAX_AT_ONCE);
   });
 
-  it(`Should return 5 elements when the following query params are set: "skip=3&limit=8";`, async () => {
+  it(`Should return 8 elements when the following query params are set: "skip=3&limit=8";`, async () => {
     const response = await request(app)
       .get(`/api/offers?skip=3&limit=8`)
       .expect(200)
       .expect(`Content-Type`, /json/);
 
     const offers = response.body;
-    assert.strictEqual(offers.length, 5);
+    assert.strictEqual(offers.length, 8);
   });
 
   it(`Should return the offer which post date is equal to the provided date param;`, async () => {
@@ -53,7 +53,7 @@ describe(`GET /api/offers test suite.`, () => {
 
   it(`Should return a 400 error when query params are invalid;`, async () => {
     await request(app)
-      .get(`/api/offers?skip=15&limit=8`)
+      .get(`/api/offers?skip=15&limit=${MAX_AT_ONCE + 1}`)
       .expect(400)
       .expect(`Content-Type`, /html/);
   });

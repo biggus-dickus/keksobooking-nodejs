@@ -23,7 +23,7 @@ offersRouter.get(``, (req, res) => {
   const skip = parseInt(req.query.skip, 10) || 0;
   const limit = parseInt(req.query.limit, 10) || MAX_AT_ONCE;
 
-  if (skip < 0 || limit < 0 || skip > MAX_AT_ONCE) {
+  if (skip < 0 || limit < 0 || limit > MAX_AT_ONCE) {
     res.status(400).send(`Invalid query params`);
     return;
   }
