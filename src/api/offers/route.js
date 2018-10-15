@@ -3,8 +3,6 @@
 const express = require(`express`);
 
 const generateEntity = require(`../../model/entity`);
-const IllegalArgumentError = require(`../error/illegal-argument`);
-const NotFoundError = require(`../error/not-found`);
 const {MAX_AT_ONCE} = require(`../../model/constants`);
 
 
@@ -26,7 +24,8 @@ offersRouter.get(``, (req, res) => {
   const limit = parseInt(req.query.limit, 10) || MAX_AT_ONCE;
 
   if (skip < 0 || limit < 0 || skip >= limit || limit > MAX_AT_ONCE || skip > MAX_AT_ONCE) {
-    throw new IllegalArgumentError(`Invalid query params.`);
+    res.status(400).send(`Invalid query params`);
+    return;
   }
 
   const response = allOffers.slice(skip, limit);
@@ -37,16 +36,19 @@ offersRouter.get(`/:date`, (req, res) => {
   const date = req.params.date;
 
   if (!date) {
-    throw new IllegalArgumentError(`No date param provided`);
+    res.status(400).send(`No date param provided`);
+    return;
   }
 
   if (isNaN(+date)) {
-    throw new IllegalArgumentError(`Incorrect date format: {${date}}. Must be a UNIX date.`);
+    res.status(400).send(`Incorrect date format: {${date}}. Must be a UNIX date.`);
+    return;
   }
 
   const found = allOffers.find((it) => it.date === +date);
   if (!found) {
-    throw new NotFoundError(`No offer was found with date ${date}`);
+    res.status(404).send(`No offer was found with date ${date}`);
+    return;
   }
 
   res.send(found);
