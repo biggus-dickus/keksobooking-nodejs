@@ -26,7 +26,7 @@ describe(`Generate file test suite.`, () => {
   });
 
   it(`Should throw an error if the provided offers count exceeds ${MAX_AT_ONCE}`, () => {
-    assert.throws(() => makeFile(15));
+    assert.throws(() => makeFile(MAX_AT_ONCE + 1));
   });
 
   it(`Should throw an error if the provided offers count <= 0`, () => {
