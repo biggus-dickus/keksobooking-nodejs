@@ -1,6 +1,9 @@
 'use strict';
 
 const express = require(`express`);
+const multer = require(`multer`);
+const jsonParser = express.json();
+const upload = multer({storage: multer.memoryStorage()});
 
 const generateEntity = require(`../../model/entity`);
 const {MAX_AT_ONCE} = require(`../../model/constants`);
@@ -19,6 +22,7 @@ const makeOffers = (max = MAX_AT_ONCE) => {
 const allOffers = makeOffers();
 const offersRouter = new express.Router();
 
+// All offers
 offersRouter.get(``, (req, res) => {
   const skip = parseInt(req.query.skip, 10) || 0;
   const limit = parseInt(req.query.limit, 10) || MAX_AT_ONCE;
@@ -32,6 +36,8 @@ offersRouter.get(``, (req, res) => {
   res.send(response);
 });
 
+
+// Offer by date
 offersRouter.get(`/:date`, (req, res) => {
   const date = req.params.date;
 
@@ -52,6 +58,16 @@ offersRouter.get(`/:date`, (req, res) => {
   }
 
   res.send(found);
+});
+
+
+// Post an offer
+offersRouter.post(``, jsonParser, upload.single(`avatar`), (req, res) => {
+  const {body, file} = req;
+  if (file) {
+    body.avatar = file.originalname;
+  }
+  res.send(body);
 });
 
 module.exports = offersRouter;

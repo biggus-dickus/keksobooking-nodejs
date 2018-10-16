@@ -20,9 +20,15 @@ const ERROR_HANDLER = (err, req, res, _next) => {
     res.status(err.code || 500).send(err.message);
   }
 };
+const CORS_HANDLER = (req, res, next) => {
+  res.header(`Access-Control-Allow-Origin`, `*`);
+  res.header(`Access-Control-Allow-Headers`, `Origin, X-Requested-With, Content-Type, Accept`);
+  next();
+};
 
 app.use(express.static(`${process.cwd()}/static`));
 
+app.use(CORS_HANDLER);
 app.use(`/api/offers`, offersRouter);
 
 app.use(NOT_FOUND_HANDLER);
