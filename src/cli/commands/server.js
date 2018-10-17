@@ -11,16 +11,16 @@ const app = express();
 const HOST_NAME = `127.0.0.1`;
 const DEFAULT_PORT = 3000;
 
-const NOT_FOUND_HANDLER = (req, res) => {
+const notFoundHandler = (req, res) => {
   res.status(404).send(`File or page was not found`);
 };
-const ERROR_HANDLER = (err, req, res, _next) => {
+const errorHandler = (err, req, res, _next) => {
   if (err) {
     console.error(err);
     res.status(err.code || 500).send(err.message);
   }
 };
-const CORS_HANDLER = (req, res, next) => {
+const CORSHandler = (req, res, next) => {
   res.header(`Access-Control-Allow-Origin`, `*`);
   res.header(`Access-Control-Allow-Headers`, `Origin, X-Requested-With, Content-Type, Accept`);
   next();
@@ -28,11 +28,11 @@ const CORS_HANDLER = (req, res, next) => {
 
 app.use(express.static(`${process.cwd()}/static`));
 
-app.use(CORS_HANDLER);
+app.use(CORSHandler);
 app.use(`/api/offers`, offersRouter);
 
-app.use(NOT_FOUND_HANDLER);
-app.use(ERROR_HANDLER);
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 const runServer = (...args) => {
   let port = args[args.indexOf(`-p`) + 1];
