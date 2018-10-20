@@ -17,7 +17,7 @@ const notFoundHandler = (req, res) => {
 const errorHandler = (err, req, res, _next) => {
   if (err) {
     console.error(err);
-    res.status(err.code || 500).send(err.message);
+    res.status(err.code || 500).send(`Server has fallen into unrecoverable problem and won't stand up.`);
   }
 };
 const CORSHandler = (req, res, next) => {
@@ -47,6 +47,6 @@ const runServer = (...args) => {
 module.exports = {
   alias: [`--server`, `-s`],
   description: `Starts a local server on provided <port> (${DEFAULT_PORT} by default). Example: "--server -p 1488"`,
-  run: (port) => runServer(port),
+  run: (...args) => runServer(...args),
   app
 };
