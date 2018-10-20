@@ -13,7 +13,7 @@ describe(`GET /api/offers test suite.`, () => {
       .expect(200)
       .expect(`Content-Type`, /json/);
 
-    const offers = response.body;
+    const offers = response.body.data;
     assert.strictEqual(offers.length, MAX_AT_ONCE);
   });
 
@@ -23,7 +23,7 @@ describe(`GET /api/offers test suite.`, () => {
       .expect(200)
       .expect(`Content-Type`, /json/);
 
-    const offers = response.body;
+    const offers = response.body.data;
     assert.strictEqual(offers.length, MAX_AT_ONCE);
   });
 
@@ -33,13 +33,13 @@ describe(`GET /api/offers test suite.`, () => {
       .expect(200)
       .expect(`Content-Type`, /json/);
 
-    const offers = response.body;
+    const offers = response.body.data;
     assert.strictEqual(offers.length, 8);
   });
 
   it(`Should return the offer which post date is equal to the provided date param;`, async () => {
     const response = await request(app).get(`/api/offers?limit=3`);
-    const offers = response.body;
+    const offers = response.body.data;
     const dateQ = offers[1].date;
 
     const newResponse = await request(app)
