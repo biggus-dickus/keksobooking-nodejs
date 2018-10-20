@@ -83,6 +83,11 @@ offersRouter.post(``, jsonParser, upload.single(`avatar`), (req, res) => {
     body.name = getRandomElement(NAMES);
   }
 
+  if (req.headers[`content-type`].search(/multipart\/form-data/) !== -1
+    && typeof body.features === `string`) {
+    body.features = [body.features];
+  }
+
   const createOffer = (postObj) => {
     const address = postObj.address.split(`,`);
 
