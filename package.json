@@ -5,6 +5,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
+    "db:fill": "node . --fill",
     "db:start": "mongod --port 27017 --dbpath=./data",
     "serve": "node . -s",
     "start": "node .",

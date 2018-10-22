@@ -3,8 +3,12 @@
 
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
   <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700,900" rel="stylesheet">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
   <title>Кексобукинг</title>
 </head>
 
@@ -91,7 +95,7 @@
   <div class="notice">
     <h2 class="notice__title">Ваше объявление</h2>
 
-    <form class="notice__form notice__form--disabled" method="post" action="https://js.dump.academy/keksobooking"
+    <form class="notice__form notice__form--disabled" method="post" action="/api/offers"
           enctype="multipart/form-data" autocomplete="off">
       <fieldset class="notice__header">
         <legend>Ваша фотография (для карты)</legend>
@@ -260,7 +264,7 @@
   </button>
 </template>
 <script>
-  window.SERVER_URL_GET = 'http://localhost:3000/api/offers?skip=0&limit=50';
+  window.SERVER_URL_GET = 'http://localhost:3000/api/offers?skip=0&limit=20';
   window.SERVER_URL_POST = 'http://localhost:3000/api/offers';
 </script>
 <script src="script.min.js"></script>
