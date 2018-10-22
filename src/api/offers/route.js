@@ -33,8 +33,8 @@ offersRouter.get(``, asyncMiddleware(async (req, res) => {
   const skip = parseInt(req.query.skip, 10) || 0;
   const limit = parseInt(req.query.limit, 10) || MAX_AT_ONCE;
 
-  if (skip < 0 || limit < 0 || limit > MAX_AT_ONCE) {
-    res.status(400).send(`Invalid query params: "skip" and "limit" cannot be lower than 0, "limit" cannot be greater than ${MAX_AT_ONCE}.`);
+  if (skip < 0 || limit < 0) {
+    res.status(400).send(`Invalid query params: "skip" and "limit" must be an integer not lower than 0.`);
     return;
   }
 

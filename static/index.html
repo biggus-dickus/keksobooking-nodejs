@@ -244,7 +244,7 @@
 <template>
   <article class="map__card popup">
     <img src="img/avatars/user01.png" class="popup__avatar" width="70" height="70">
-    <button class="popup__close">Закрыть</button>
+    <button type="button" class="popup__close">Закрыть</button>
     <h3>Уютное гнездышко для молодоженов</h3>
     <p>
       <small>102-0082 Tōkyō-to, Chiyoda-ku, Ichibanchō, 14−3</small>
@@ -264,7 +264,7 @@
   </button>
 </template>
 <script>
-  window.SERVER_URL_GET = 'http://localhost:3000/api/offers?skip=0&limit=20';
+  window.SERVER_URL_GET = 'http://localhost:3000/api/offers?skip=0&limit=50';
   window.SERVER_URL_POST = 'http://localhost:3000/api/offers';
 </script>
 <script src="script.min.js"></script>

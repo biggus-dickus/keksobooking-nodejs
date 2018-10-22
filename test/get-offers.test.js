@@ -60,7 +60,7 @@ describe(`GET /api/offers test suite.`, () => {
 
   it(`Should return a 400 error when query params are invalid;`, async () => {
     await request(app)
-      .get(`/api/offers?skip=15&limit=${MAX_AT_ONCE + 1}`)
+      .get(`/api/offers?skip=-1&limit=hz`)
       .expect(400)
       .expect(`Content-Type`, /html/);
   });
