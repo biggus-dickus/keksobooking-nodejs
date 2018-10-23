@@ -7,6 +7,7 @@ const toStream = require(`buffer-to-stream`);
 const upload = multer({storage: multer.memoryStorage()});
 
 const {getRandomElement} = require(`../../utils/randomizer`);
+const logger = require(`../../logger`);
 const {MAX_AT_ONCE} = require(`../../model/constants`);
 const {NAMES} = require(`../../model/constraints`);
 const validate = require(`./validate`);
@@ -95,10 +96,10 @@ offersRouter.get(`/:date/avatar`, asyncMiddleware(async (req, res) => {
   res.header(`Content-Type`, `image/jpg`);
   res.header(`Content-Length`, result.info.length);
 
-  res.on(`error`, (e) => console.error(e));
+  res.on(`error`, (e) => logger.error(e));
   res.on(`end`, () => res.end());
   const stream = result.stream;
-  stream.on(`error`, (e) => console.error(e));
+  stream.on(`error`, (e) => logger.error(e));
   stream.on(`end`, () => res.end());
   stream.pipe(res);
 }));

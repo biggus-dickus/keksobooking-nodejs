@@ -1,19 +1,21 @@
 'use strict';
 
-const colors = require(`colors`);
+require(`dotenv`).config();
+
 const express = require(`express`);
 const MongoError = require(`mongodb`).MongoError;
 
+const logger = require(`../../logger`);
+
 const ImagesStore = require(`../../api/images/store`);
 const OffersStore = require(`../../api/offers/store`);
-
 const offersRouter = require(`../../api/offers/route`)(OffersStore, ImagesStore);
 
 
 const app = express();
 
-const HOST_NAME = `127.0.0.1`;
-const DEFAULT_PORT = 3000;
+const HOST_NAME = process.env.SERVER_HOST || `127.0.0.1`;
+const DEFAULT_PORT = process.env.SERVER_PORT || 3000;
 
 const notFoundHandler = (req, res) => {
   res.status(404).send(`File or page was not found`);
@@ -21,7 +23,7 @@ const notFoundHandler = (req, res) => {
 
 const errorHandler = (err, req, res, _next) => {
   if (err) {
-    console.error(err);
+    logger.error(err);
     if (err instanceof MongoError) {
       res.status(400).send(`DB operation error. You may retry and hope for the best.`);
       return;
@@ -30,6 +32,7 @@ const errorHandler = (err, req, res, _next) => {
     res.status(err.code || 500).send(`Server has fallen into unrecoverable problem and won't stand up.`);
   }
 };
+
 const CORSHandler = (req, res, next) => {
   res.header(`Access-Control-Allow-Origin`, `*`);
   res.header(`Access-Control-Allow-Headers`, `Origin, X-Requested-With, Content-Type, Accept`);
@@ -50,7 +53,7 @@ const runServer = (...args) => {
     port = DEFAULT_PORT;
   }
 
-  app.listen(port, () => console.log(`${colors.cyan(`Local server is up and running at http://${HOST_NAME}:${port}/`)}`));
+  app.listen(port, () => logger.info(`Local server is up and running at http://${HOST_NAME}:${port}/`));
 };
 
 
