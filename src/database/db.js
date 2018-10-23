@@ -2,12 +2,12 @@
 
 const {MongoClient} = require(`mongodb`);
 
-const url = `mongodb://localhost:27017`;
-const dbName = `keksobooking`;
+const URL = `mongodb://localhost:27017`;
+const DB_NAME = `keksobooking`;
 
 // Export connection promise
-module.exports = MongoClient.connect(url, {useNewUrlParser: true})
-  .then((client) => client.db(dbName))
+module.exports = MongoClient.connect(URL, {useNewUrlParser: true})
+  .then((client) => client.db(DB_NAME))
   .catch((e) => {
     console.error(`Failed to connect to MongoDB`, e);
     process.exit(1);
