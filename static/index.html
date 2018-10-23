@@ -3,8 +3,12 @@
 
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
   <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700,900" rel="stylesheet">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
   <title>Кексобукинг</title>
 </head>
 
@@ -91,7 +95,7 @@
   <div class="notice">
     <h2 class="notice__title">Ваше объявление</h2>
 
-    <form class="notice__form notice__form--disabled" method="post" action="https://js.dump.academy/keksobooking"
+    <form class="notice__form notice__form--disabled" method="post" action="/api/offers"
           enctype="multipart/form-data" autocomplete="off">
       <fieldset class="notice__header">
         <legend>Ваша фотография (для карты)</legend>
@@ -240,7 +244,7 @@
 <template>
   <article class="map__card popup">
     <img src="img/avatars/user01.png" class="popup__avatar" width="70" height="70">
-    <button class="popup__close">Закрыть</button>
+    <button type="button" class="popup__close">Закрыть</button>
     <h3>Уютное гнездышко для молодоженов</h3>
     <p>
       <small>102-0082 Tōkyō-to, Chiyoda-ku, Ichibanchō, 14−3</small>

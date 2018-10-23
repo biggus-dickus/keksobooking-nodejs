@@ -2,8 +2,12 @@
 
 const colors = require(`colors`);
 const express = require(`express`);
+const MongoError = require(`mongodb`).MongoError;
 
-const offersRouter = require(`../../api/offers/route`);
+const ImagesStore = require(`../../api/images/store`);
+const OffersStore = require(`../../api/offers/store`);
+
+const offersRouter = require(`../../api/offers/route`)(OffersStore, ImagesStore);
 
 
 const app = express();
@@ -14,9 +18,15 @@ const DEFAULT_PORT = 3000;
 const notFoundHandler = (req, res) => {
   res.status(404).send(`File or page was not found`);
 };
+
 const errorHandler = (err, req, res, _next) => {
   if (err) {
     console.error(err);
+    if (err instanceof MongoError) {
+      res.status(400).send(`DB operation error. You may retry and hope for the best.`);
+      return;
+    }
+
     res.status(err.code || 500).send(`Server has fallen into unrecoverable problem and won't stand up.`);
   }
 };
@@ -47,6 +57,5 @@ const runServer = (...args) => {
 module.exports = {
   alias: [`--server`, `-s`],
   description: `Starts a local server on provided <port> (${DEFAULT_PORT} by default). Example: "--server -p 1488"`,
-  run: (...args) => runServer(...args),
-  app
+  run: (...args) => runServer(...args)
 };

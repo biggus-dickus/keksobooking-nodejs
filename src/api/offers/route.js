@@ -3,53 +3,47 @@
 const express = require(`express`);
 const multer = require(`multer`);
 const jsonParser = express.json();
+const toStream = require(`buffer-to-stream`);
 const upload = multer({storage: multer.memoryStorage()});
 
-const generateEntity = require(`../../model/entity`);
 const {getRandomElement} = require(`../../utils/randomizer`);
 const {MAX_AT_ONCE} = require(`../../model/constants`);
 const {NAMES} = require(`../../model/constraints`);
 const validate = require(`./validate`);
 
 
-const makeOffers = (max = MAX_AT_ONCE) => {
-  const offers = [];
-
-  for (let i = 0; i < max; i++) {
-    offers.push(generateEntity());
-  }
-
-  return offers;
-};
-
-const allOffers = makeOffers();
 const offersRouter = new express.Router();
 
+const asyncMiddleware = (fn) => (req, res, next) => fn(req, res, next).catch(next);
+
+const toPage = async (cursor, skip = 0, limit = MAX_AT_ONCE) => {
+  const packet = await cursor.skip(skip).limit(limit).toArray();
+
+  return {
+    data: packet,
+    skip,
+    limit,
+    total: await cursor.count()
+  };
+};
+
+
 // All offers
-offersRouter.get(``, (req, res) => {
+offersRouter.get(``, asyncMiddleware(async (req, res) => {
   const skip = parseInt(req.query.skip, 10) || 0;
   const limit = parseInt(req.query.limit, 10) || MAX_AT_ONCE;
 
-  if (skip < 0 || limit < 0 || limit > MAX_AT_ONCE) {
-    res.status(400).send(`Invalid query params: "skip" and "limit" cannot be lower than 0, "limit" cannot be greater than ${MAX_AT_ONCE}.`);
+  if (skip < 0 || limit < 0) {
+    res.status(400).send(`Invalid query params: "skip" and "limit" must be an integer not lower than 0.`);
     return;
   }
 
-  const data = allOffers.slice(skip, skip + limit);
-
-  const response = {
-    data,
-    skip,
-    limit,
-    total: data.length
-  };
-
-  res.send(response);
-});
+  res.send(await toPage(await offersRouter.offersStore.getAll(), skip, limit));
+}));
 
 
 // Offer by date
-offersRouter.get(`/:date`, (req, res) => {
+offersRouter.get(`/:date`, asyncMiddleware(async (req, res) => {
   const date = req.params.date;
 
   if (!date) {
@@ -58,29 +52,63 @@ offersRouter.get(`/:date`, (req, res) => {
   }
 
   if (isNaN(+date)) {
-    res.status(400).send(`Incorrect date format: {${date}}. Must be a UNIX date.`);
+    res.status(400).send(`Incorrect date format: ${date}. Must be a UNIX date.`);
     return;
   }
 
-  const found = allOffers.find((it) => it.date === +date);
+  const found = await offersRouter.offersStore.getOne({date: +date});
   if (!found) {
     res.status(404).send(`No offer was found with date ${date}`);
     return;
   }
 
   res.send(found);
-});
+}));
+
+
+// Get avatar by post date
+offersRouter.get(`/:date/avatar`, asyncMiddleware(async (req, res) => {
+  const date = req.params.date;
+
+  if (!date) {
+    res.status(400).send(`No date param provided`);
+    return;
+  }
+
+  if (isNaN(+date)) {
+    res.status(400).send(`Incorrect date format: ${date}. Must be a UNIX date.`);
+    return;
+  }
+
+  const found = await offersRouter.offersStore.getOne({date: +date});
+  if (!found) {
+    res.status(404).send(`No offer was found with date ${date}`);
+    return;
+  }
+
+  const result = await offersRouter.imagesStore.get(found._id);
+  if (!result) {
+    res.status(404).send(`No avatar was found for the offer with date ${date}`);
+    return;
+  }
+
+  res.header(`Content-Type`, `image/jpg`);
+  res.header(`Content-Length`, result.info.length);
+
+  res.on(`error`, (e) => console.error(e));
+  res.on(`end`, () => res.end());
+  const stream = result.stream;
+  stream.on(`error`, (e) => console.error(e));
+  stream.on(`end`, () => res.end());
+  stream.pipe(res);
+}));
 
 
 // Post an offer
-offersRouter.post(``, jsonParser, upload.single(`avatar`), (req, res) => {
+offersRouter.post(``, jsonParser, upload.single(`avatar`), asyncMiddleware(async (req, res) => {
   const {body, file} = req;
   if (file) {
     body.avatar = file.originalname;
-  }
-
-  if (!body.name) {
-    body.name = getRandomElement(NAMES);
   }
 
   if (req.headers[`content-type`].search(/multipart\/form-data/) !== -1
@@ -90,13 +118,19 @@ offersRouter.post(``, jsonParser, upload.single(`avatar`), (req, res) => {
 
   const createOffer = (postObj) => {
     const address = postObj.address.split(`,`);
+    const now = Date.now();
 
     return {
+      author: {
+        name: postObj.name || getRandomElement(NAMES),
+        avatar: `api/offers/${now}/avatar`
+      },
       offer: postObj,
       location: {
         x: +address[0],
         y: +address[1]
-      }
+      },
+      date: now
     };
   };
 
@@ -107,7 +141,20 @@ offersRouter.post(``, jsonParser, upload.single(`avatar`), (req, res) => {
     return;
   }
 
-  res.send(createOffer({...body}));
-});
+  const offer = createOffer({...body});
+  const result = await offersRouter.offersStore.saveOne(offer);
+  const insertedId = result.insertedId;
 
-module.exports = offersRouter;
+  if (file) {
+    await offersRouter.imagesStore.save(insertedId, toStream(file.buffer));
+  }
+
+  res.send(offer);
+}));
+
+
+module.exports = (oStore, iStore) => {
+  offersRouter.offersStore = oStore;
+  offersRouter.imagesStore = iStore;
+  return offersRouter;
+};

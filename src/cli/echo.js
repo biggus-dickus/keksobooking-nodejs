@@ -1,7 +1,10 @@
 'use strict';
 
+const packageInfo = require(`../../package`);
+
 const commands = [
   require(`./commands/about`),
+  require(`./commands/fill`),
   require(`./commands/generate`),
   require(`./commands/help`),
   require(`./commands/server`),
@@ -13,7 +16,11 @@ const echo = () => {
   const args = process.argv.slice(2);
 
   if (!args[0]) {
-    commands.find((command) => command.alias.includes(`--generate`)).run();
+    console.log([
+      `Keksobooking on NodeJS, v${packageInfo.version}.`,
+      `To view the list of available commands, type "--help".`
+    ].join(`\n`));
+    process.exit(0);
     return;
   }
 

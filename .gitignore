@@ -13,6 +13,7 @@ npm-debug.log*
 node_modules/
 
 build/
+data/*
 tmp/*
 
 .env

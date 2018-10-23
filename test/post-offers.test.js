@@ -1,10 +1,18 @@
 'use strict';
 
 const assert = require(`assert`);
+const express = require(`express`);
 const request = require(`supertest`);
 
-const app = require(`../src/cli/commands/server`).app;
+const imagesStoreMock = require(`./mock/images-store.mock`);
+const offersStoreMock = require(`./mock/offers-store.mock`);
+const offersRoute = require(`../src/api/offers/route`)(offersStoreMock, imagesStoreMock);
+
+const app = express();
 const {TITLE_MIN_LENGTH, TITLE_MAX_LENGTH, TYPES, PRICE_MIN, PRICE_MAX, X_MIN, X_MAX, Y_MIN, Y_MAX, ROOMS_MIN, ROOMS_MAX, FEATURES} = require(`../src/model/constraints`);
+
+app.use(`/api/offers`, offersRoute);
+
 
 const validPost = {
   name: `Pavel`,

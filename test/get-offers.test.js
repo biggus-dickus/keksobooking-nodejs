@@ -1,10 +1,17 @@
 'use strict';
 
 const assert = require(`assert`);
+const express = require(`express`);
 const request = require(`supertest`);
 
-const app = require(`../src/cli/commands/server`).app;
+const imagesStoreMock = require(`./mock/images-store.mock`);
+const offersStoreMock = require(`./mock/offers-store.mock`);
+const offersRoute = require(`../src/api/offers/route`)(offersStoreMock, imagesStoreMock);
 const {MAX_AT_ONCE} = require(`../src/model/constants`);
+
+
+const app = express();
+app.use(`/api/offers`, offersRoute);
 
 describe(`GET /api/offers test suite.`, () => {
   it(`Should return all offers as json array of ${MAX_AT_ONCE} elements;`, async () => {
@@ -53,7 +60,7 @@ describe(`GET /api/offers test suite.`, () => {
 
   it(`Should return a 400 error when query params are invalid;`, async () => {
     await request(app)
-      .get(`/api/offers?skip=15&limit=${MAX_AT_ONCE + 1}`)
+      .get(`/api/offers?skip=-1&limit=hz`)
       .expect(400)
       .expect(`Content-Type`, /html/);
   });
