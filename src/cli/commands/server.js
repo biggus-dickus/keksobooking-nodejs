@@ -9,7 +9,6 @@ const logger = require(`../../logger`);
 
 const ImagesStore = require(`../../api/images/store`);
 const OffersStore = require(`../../api/offers/store`);
-// const offersRouter = require(`../../api/offers/route`)(OffersStore, ImagesStore);
 const offersRouter = require(`../../api/offers/route/index`)(OffersStore, ImagesStore);
 
 
