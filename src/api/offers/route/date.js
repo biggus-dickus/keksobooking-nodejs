@@ -5,7 +5,7 @@ const logger = require(`../../../logger`);
 
 
 module.exports = (router) => {
-  // OGet offer by date
+  // Get offer by date
   router.get(`/:date`, asyncMiddleware(async (req, res) => {
     const date = req.params.date;
 
