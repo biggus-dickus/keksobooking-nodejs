@@ -25,7 +25,8 @@ const validPost = {
   guests: 1,
   checkin: `09:00`,
   checkout: `07:00`,
-  features: [`elevator`, `conditioner`]
+  features: [`elevator`, `conditioner`],
+  photos: []
 };
 
 const sendInvalidData = async (data) => {

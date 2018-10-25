@@ -5,17 +5,12 @@
 
 ---
 
-_Не удаляйте и не обращайте внимание на файлы:_<br>
-_`.editorconfig`, `.gitattributes`, `.gitignore`, `.travis.yml`._
-
----
-
-### Быстрый запуск приложения (дев-окружение)
+### Быстрый запуск приложения (`NODE_ENV = 'development'`)
 1. Установить соединение с MongoDB в активной сессии терминала: `npm run db:start`.
 2. Заполнить БД тестовыми данными: `npm run db:fill`.
-3. Запустить локальный сервер: `npm run serve`.
+3. Поднять локальный сервер: `npm start`.
 
----
+___
 
 <a href="https://htmlacademy.ru/intensive/nodejs"><img align="left" width="50" height="50" alt="HTML Academy" src="https://up.htmlacademy.ru/static/img/intensive/nodejs/logo-for-github-2.png"></a>
 

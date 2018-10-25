@@ -1,7 +1,7 @@
 'use strict';
 
 const connection = require(`../../database/db`);
-
+const logger = require(`../../logger`);
 
 const setupCollection = async (name) => {
   const db = await connection;
@@ -51,4 +51,4 @@ class OffersStore {
 const collectionName = `offers`;
 
 module.exports = new OffersStore(setupCollection(collectionName).
-catch((e) => console.error(`Failed to set up "${collectionName}" collection`, e)));
+catch((e) => logger.error(`Failed to set up "${collectionName}" collection`, e)));

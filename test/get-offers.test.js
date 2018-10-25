@@ -6,7 +6,7 @@ const request = require(`supertest`);
 
 const imagesStoreMock = require(`./mock/images-store.mock`);
 const offersStoreMock = require(`./mock/offers-store.mock`);
-const offersRoute = require(`../src/api/offers/route`)(offersStoreMock, imagesStoreMock);
+const offersRoute = require(`../src/api/offers/route/index`)(offersStoreMock, imagesStoreMock);
 const {MAX_AT_ONCE} = require(`../src/model/constants`);
 
 

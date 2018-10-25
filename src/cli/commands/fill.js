@@ -1,6 +1,6 @@
 'use strict';
 
-const colors = require(`colors`);
+const logger = require(`../../logger`);
 
 const generateOffers = require(`../../../test/generator/generate-offers`);
 const {MAX_AT_ONCE} = require(`../../model/constants`);
@@ -12,11 +12,11 @@ module.exports = {
   run: (count = MAX_AT_ONCE) => {
     OffersStore.saveMany(generateOffers(+count))
       .then(() => {
-        console.log(`${colors.green(`Test data generated successfully.`)}`);
+        logger.info(`Test data generated successfully.`);
         process.exit(0);
       })
       .catch((e) => {
-        console.error(`${colors.red(`Error generating data: ${e}`)}`);
+        logger.error(`Error generating data: ${e}`);
         process.exit(1);
       });
   }
