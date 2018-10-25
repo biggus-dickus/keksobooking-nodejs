@@ -5,10 +5,9 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "build": "NODE_ENV=production node . -s",
     "db:fill": "node . --fill",
     "db:start": "mongod --port 27017 --dbpath=./data",
-    "start": "NODE_ENV=development node . -s",
+    "start": "node . -s",
     "test:lint": "eslint .",
     "test:mocha": "mocha",
     "test": "npm run test:lint && npm run test:mocha"
