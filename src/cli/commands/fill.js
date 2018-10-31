@@ -8,7 +8,7 @@ const OffersStore = require(`../../api/offers/store`);
 
 module.exports = {
   alias: [`--fill`, `-f`],
-  description: `Fills the database with mock data. For this to work, MongoDB server and NodeJS driver must be set up first. Please refer to https://docs.mongodb.com for details.`,
+  description: `Fills the database with <count> mock data offers (up to ${MAX_AT_ONCE}). For this to work, MongoDB server and NodeJS driver must be set up first. Please refer to https://docs.mongodb.com for details.`,
   run: (count = MAX_AT_ONCE) => {
     OffersStore.saveMany(generateOffers(+count))
       .then(() => {

@@ -12,7 +12,7 @@ module.exports = {
   PRICE_MAX: 100000,
   TYPES: [`flat`, `palace`, `house`, `bungalow`],
   ROOMS_MIN: 1,
-  ROOMS_MAX: 5,
+  ROOMS_MAX: 100,
   GUESTS_MIN: 1,
   GUESTS_MAX: 10,
   TIMES: [`12:00`, `13:00`, `14:00`],

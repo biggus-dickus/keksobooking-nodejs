@@ -95,8 +95,10 @@
   <div class="notice">
     <h2 class="notice__title">Ваше объявление</h2>
 
-    <form class="notice__form notice__form--disabled" method="post" action="/api/offers"
-          enctype="multipart/form-data" autocomplete="off">
+    <form class="notice__form notice__form--disabled"
+          method="post" action="/api/offers"
+          enctype="multipart/form-data"
+          autocomplete="off">
       <fieldset class="notice__header">
         <legend>Ваша фотография (для карты)</legend>
         <div class="notice__photo">
@@ -205,7 +207,7 @@
         <label>Фотографии жилья</label>
         <div class="form__photo-container">
           <div class="upload">
-            <input type="file" id="images" multiple>
+            <input type="file" id="images" name="preview" multiple>
             <label for="images" class="drop-zone">Загрузите или&nbsp;перетащите сюда фото</label>
             <div class="upload__preview upload__preview--photos"></div>
           </div>
