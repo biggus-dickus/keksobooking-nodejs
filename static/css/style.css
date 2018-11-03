@@ -285,6 +285,7 @@ textarea:focus
 {
     top: 375px;
     left: 50%;
+    z-index: 2;
 
     width: 65px;
     height: 65px;

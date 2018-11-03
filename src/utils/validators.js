@@ -36,8 +36,8 @@ module.exports = {
     const [hours, minutes] = time;
 
     const isValidFormat = time.length === 2;
-    const isValidHours = isBetween(hours, 0, 23, true);
-    const isValidMinutes = isBetween(minutes, 0, 60, true);
+    const isValidHours = isBetween(parseInt(hours, 10), 0, 23, true);
+    const isValidMinutes = isBetween(parseInt(minutes, 10), 0, 60, true);
 
     return isValidFormat && isValidHours && isValidMinutes;
   },
@@ -47,8 +47,8 @@ module.exports = {
     const [x, y] = address;
 
     const isValidFormat = address.length === 2;
-    const isValidX = isBetween(x, X_MIN, X_MAX, true, true);
-    const isValidY = isBetween(y, Y_MIN, Y_MAX, true, true);
+    const isValidX = isBetween(parseInt(x, 10), X_MIN, X_MAX, true, true);
+    const isValidY = isBetween(parseInt(y, 10), Y_MIN, Y_MAX, true, true);
 
     return isValidFormat && isValidX && isValidY;
   },

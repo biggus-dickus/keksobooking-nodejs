@@ -4,14 +4,11 @@ const {TITLES, X_MIN, X_MAX, Y_MIN, Y_MAX, PRICE_MIN, PRICE_MAX, TYPES, ROOMS_MI
 const {WEEK} = require(`./constants`);
 
 const {getRandomElement, getRandomElements, getRandomIntInclusive, getRandomIntArbitrary, getRandomString} = require(`../utils/randomizer`);
-const removeDuplicates = require(`../utils/unique-array`);
 const shuffle = require(`../utils/shuffle-array`);
 
 
 const generateEntity = () => {
   const [coordX, coordY] = [getRandomIntInclusive(X_MIN, X_MAX), getRandomIntInclusive(Y_MIN, Y_MAX)];
-
-  const uniqueFeatures = removeDuplicates(FEATURES);
 
   return {
     author: {
@@ -27,7 +24,7 @@ const generateEntity = () => {
       guests: getRandomIntInclusive(GUESTS_MIN, GUESTS_MAX),
       checkin: getRandomElement(TIMES),
       checkout: getRandomElement(TIMES),
-      features: getRandomElements(uniqueFeatures, getRandomIntArbitrary(1, uniqueFeatures.length)),
+      features: getRandomElements(FEATURES, getRandomIntArbitrary(1, FEATURES.length)),
       description: ``,
       photos: shuffle(PHOTOS.slice())
     },

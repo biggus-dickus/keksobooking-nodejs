@@ -46,7 +46,7 @@
           <option value="any" selected>Любой тип жилья</option>
           <option value="flat">Квартира</option>
           <option value="house">Дом</option>
-          <option value="bungalo">Сарай</option>
+          <option value="bungalow">Сарай</option>
         </select>
 
         <select name="housing-price" id="housing-price" class="map__filter">
@@ -95,8 +95,11 @@
   <div class="notice">
     <h2 class="notice__title">Ваше объявление</h2>
 
-    <form class="notice__form notice__form--disabled" method="post" action="/api/offers"
-          enctype="multipart/form-data" autocomplete="off">
+    <form class="notice__form notice__form--disabled"
+          method="post"
+          action="/api/offers"
+          enctype="multipart/form-data"
+          autocomplete="off">
       <fieldset class="notice__header">
         <legend>Ваша фотография (для карты)</legend>
         <div class="notice__photo">
@@ -106,9 +109,7 @@
             </div>
             <input type="file" id="avatar" name="avatar">
             <label class="drop-zone" for="avatar">Загрузите или&nbsp;перетащите сюда фото</label>
-            <p class="notice__info">Заполните все обязательные поля, назначьте цену, загрузите фотографии. Придумайте
-              интересное описание. Оно сделает объявление более живым и привлекательным. Получившееся объявление должно
-              давать гостям полное представление о вашем жилье.</p>
+            <p class="notice__info">Заполните все обязательные поля, назначьте цену, загрузите фотографии. Придумайте интересное описание. Оно сделает объявление более живым и привлекательным. Получившееся объявление должно давать гостям полное представление о вашем жилье.</p>
           </div>
         </div>
       </fieldset>
@@ -128,7 +129,7 @@
         <label for="type">Тип жилья</label>
         <select id="type" name="type">
           <option value="flat" selected>Квартира</option>
-          <option value="bungalo">Лачуга</option>
+          <option value="bungalow">Лачуга</option>
           <option value="house">Дом</option>
           <option value="palace">Дворец</option>
         </select>
@@ -205,7 +206,7 @@
         <label>Фотографии жилья</label>
         <div class="form__photo-container">
           <div class="upload">
-            <input type="file" id="images" multiple>
+            <input type="file" id="images" name="preview" multiple>
             <label for="images" class="drop-zone">Загрузите или&nbsp;перетащите сюда фото</label>
             <div class="upload__preview upload__preview--photos"></div>
           </div>
@@ -264,8 +265,8 @@
   </button>
 </template>
 <script>
-  window.SERVER_URL_GET = 'http://localhost:3000/api/offers?skip=0&limit=50';
-  window.SERVER_URL_POST = 'http://localhost:3000/api/offers';
+  window.SERVER_URL_GET = '/api/offers?skip=0&limit=50';
+  window.SERVER_URL_POST = '/api/offers';
 </script>
 <script src="script.min.js"></script>
 </body>

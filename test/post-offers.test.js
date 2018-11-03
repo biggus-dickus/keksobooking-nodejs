@@ -66,6 +66,27 @@ describe(`POST offers test suite.`, () => {
 
     assert.strictEqual(response.body.offer.avatar, `avatarrr.jpg`);
   });
+
+  it(`Should accept multiple image files.`, async () => {
+    const response = await request(app)
+      .post(`/api/offers`)
+      .field(`title`, `Огромный прекрасный дворец ваще збс придложэниэ`)
+      .field(`address`, `333, 222`)
+      .field(`type`, `house`)
+      .field(`price`, 60000)
+      .field(`checkin`, `12:00`)
+      .field(`checkout`, `12:00`)
+      .field(`rooms`, 3)
+      .attach(`preview`, `test/fixtures/photo1.jpg`)
+      .attach(`preview`, `test/fixtures/photo2.jpg`)
+      .attach(`preview`, `test/fixtures/photo3.jpg`)
+      .expect(200)
+      .expect(`Content-Type`, /json/);
+
+    const date = response.body.date;
+
+    assert.strictEqual(response.body.offer.photos[0], `/api/offers/${date}/preview/0`);
+  });
 });
 
 
