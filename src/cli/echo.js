@@ -1,6 +1,6 @@
 'use strict';
 
-const commands = require(`./commands/all`);
+const commands = [...require(`./commands/all`)];
 commands.push(require(`./commands/help`));
 
 const runWithNoArgs = require(`./commands/default`);

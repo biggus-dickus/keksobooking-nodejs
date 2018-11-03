@@ -3,7 +3,10 @@
 const colors = require(`colors`);
 const readline = require(`readline`);
 
-const availableCommands = require(`./all`);
+const availableCommands = [...require(`./all`)];
+const help = require(`./help`);
+availableCommands.push(help);
+
 const listAll = require(`./list-all`);
 const packageInfo = require(`../../../package`);
 
@@ -24,10 +27,15 @@ const ask = (question) => {
 
 
 module.exports = () => {
-  console.log(`Keksobooking on NodeJS, v${packageInfo.version}. Here's what I can do: \n${listAll()}`);
+  console.log([
+    `Keksobooking on NodeJS, v${packageInfo.version}. Here's what I can do:`,
+    listAll(),
+    colors.grey(help.alias) + ` — ` + colors.green(help.description)
+  ].join(`\n`));
 
   const talk = async (q) => {
     const aliases = listAll(`yes, please`);
+    aliases.push(...help.alias);
     const arg = await ask(q);
 
     if (aliases.includes(arg)) {
